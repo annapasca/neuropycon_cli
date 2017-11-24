@@ -18,7 +18,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../neuropype_cli'))
+sys.path.insert(0, os.path.abspath('../neuropycon_cli'))
 
 
 # from mock import Mock as MagicMock
@@ -64,7 +64,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'neuroclick'
+project = u'neuropycon_cli'
 copyright = u'2017, Dmitrii Altukhov'
 author = u'Dmitrii Altukhov'
 

@@ -1,4 +1,4 @@
-''' Command line interface for neuropype_ephy package '''
+''' Command line interface for ephypype package '''
 import click
 import nipype.pipeline.engine as pe
 
@@ -69,7 +69,7 @@ def process_pipeline(nodes, ncpu, plugin, save_path, workflow_name, verbose):
         elif plugin == 'PBS':
             workflow.run(plugin='PBS')
     else:
-        from neuropype_ephy.aux_tools import suppress_stdout_stderr
+        from ephypype.aux_tools import suppress_stdout_stderr
         with suppress_stdout_stderr():
             if plugin == 'MultiProc':
                 workflow.run(plugin='MultiProc', plugin_args={'n_procs': ncpu})
@@ -92,7 +92,7 @@ def infosrc(fif_files):
 
     $ ls ./*/*.fif
 
-    $ neuropype input ./*/*.fif
+    $ neuropycon input ./*/*.fif
 
     '''
 
@@ -140,10 +140,10 @@ def psd(fmin, fmax):
 
     EXAMPLE:
 
-    $ neuropype pwr input ~/fif_epochs/*/*-epo.fif
+    $ neuropycon pwr input ~/fif_epochs/*/*-epo.fif
 
     '''
-    from neuropype_ephy.interfaces.mne.power import Power
+    from ephypype.interfaces.mne.power import Power
     # click.echo(list(fif_files))
     power = pe.Node(interface=Power(), name='pwr')
     power.inputs.fmin = fmin
@@ -166,7 +166,7 @@ def psd(fmin, fmax):
               help='data sampling frequency')
 def connectivity(band, method, sfreq):
     """Create spectral connectivity node"""
-    from neuropype_ephy.interfaces.mne.spectral import SpectralConn
+    from ephypype.interfaces.mne.spectral import SpectralConn
     # if not method:
     #     method = ('imcoh',)
     freq_bands = [list(t) for t in band]
@@ -184,7 +184,7 @@ def connectivity(band, method, sfreq):
 def fif_ep_2_ts():
     ''' Create a node for epochs 2 npy timeseries conversion '''
 
-    from neuropype_ephy.nodes.import_data import Ep2ts
+    from ephypype.nodes.import_data import Ep2ts
     ep2ts = pe.Node(interface=Ep2ts(), name='ep2ts')
     return ep2ts
 # ------------------------------------------------------------------------- #
@@ -198,10 +198,10 @@ def multiscale(m, r):
     """Create multiscale entropy node
 
     Experimental functionality.
-    Available only in mse branch of neuropype_ephy
+    Available only in mse branch of ephypype
 
     """
-    from neuropype_ephy.mse import get_mse_multiple_sensors
+    from ephypype.mse import get_mse_multiple_sensors
     from nipype.interfaces.utility import Function
     mse = pe.Node(interface=Function(input_names=['ts_file', 'm', 'r'],
                                      output_names=['mse_file'],
@@ -221,7 +221,7 @@ def multiscale(m, r):
 @click.option('--eog-ch-name', '-o', type=click.STRING, default='')
 def ica(n_components, ecg_ch_name, eog_ch_name):
     """Compute ica solution for raw fif file"""
-    from neuropype_ephy.interfaces.mne.preproc import CompIca
+    from ephypype.interfaces.mne.preproc import CompIca
     ica_node = pe.Node(interface=CompIca(), name='ica')
     ica_node.inputs.n_components = n_components
     ica_node.inputs.ecg_ch_name = ecg_ch_name
@@ -243,7 +243,7 @@ def preproc(l_freq, h_freq, ds_freq):
     Filter and downsample of raw .fif data
 
     """
-    from neuropype_ephy.interfaces.mne.preproc import PreprocFif
+    from ephypype.interfaces.mne.preproc import PreprocFif
 
     preproc_node = pe.Node(interface=PreprocFif(), name='preproc')
 
@@ -268,7 +268,7 @@ def ds2fif():
     Convert CTF .ds raw data to .fif format
 
     """
-    from neuropype_ephy.nodes.import_data import ConvertDs2Fif
+    from ephypype.nodes.import_data import ConvertDs2Fif
 
     ds2fif_node = pe.Node(interface=ConvertDs2Fif(), name='ds2fif')
 
@@ -284,7 +284,7 @@ def epoch(length):
     """Epoch raw .fif resting state data
 
     """
-    from neuropype_ephy.interfaces.mne.preproc import CreateEp
+    from ephypype.interfaces.mne.preproc import CreateEp
 
     epoch_node = pe.Node(interface=CreateEp(), name='epoch')
 
@@ -303,10 +303,10 @@ def output_greeting():
     """Output greeting"""
 
     click.echo(click.style(r'''
-  _  _ ___ _   _ ___  ___  _____   _____ ___
- | \| | __| | | | _ \/ _ \| _ \ \ / / _ \ __|
- | .` | _|| |_| |   / (_) |  _/\ V /|  _/ _|
- |_|\_|___|\___/|_|_\\___/|_|   |_| |_| |___|''', fg='magenta'))
+ _  _  ____  __  __  ____  _____  ____  _  _  ___  _____  _  _ 
+( \( )( ___)(  )(  )(  _ \(  _  )(  _ \( \/ )/ __)(  _  )( \( )
+ )  (  )__)  )(__)(  )   / )(_)(  )___/ \  /( (__  )(_)(  )  ( 
+(_)\_)(____)(______)(_)\_)(_____)(__)   (__) \___)(_____)(_)\_)''', fg='magenta'))
     click.echo(click.style(r'''
                 _.-'-'--._
                ,', ~'` ( .'`.
