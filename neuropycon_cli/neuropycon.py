@@ -1,4 +1,4 @@
-''' Command line interface for ephypype package '''
+"""Command line interface for ephypype package"""
 import click
 import nipype.pipeline.engine as pe
 
@@ -23,7 +23,7 @@ def cli(ncpu, plugin, save_path, workflow_name, verbose):
     output_greeting()
 
 
-# ---------------- Connect all the nodes into a workflow -------------------- #
+#  Connect all the nodes into a workflow  {{{process_pipeline
 @cli.resultcallback()
 def process_pipeline(nodes, ncpu, plugin, save_path, workflow_name, verbose):
     """Create main workflow"""
@@ -77,14 +77,14 @@ def process_pipeline(nodes, ncpu, plugin, save_path, workflow_name, verbose):
                 workflow.run(plugin='Linear')
             elif plugin == 'PBS':
                 workflow.run(plugin='PBS')
-# -------------------------------------------------------------------------- #
+#  process_pipeline}}} # 
 
 
-# ------------------------------ Input node -------------------------------- #
+#  Input node {{{input # 
 @cli.command('input')
 @click.argument('fif_files', nargs=-1, type=click.Path(exists=True))
 def infosrc(fif_files):
-    '''Create input node.
+    """Specify input.
 
     Use wildcards to run computations on multiple files;
     To check yourself it's a good idea to run ls command first like this:
@@ -92,9 +92,9 @@ def infosrc(fif_files):
 
     $ ls ./*/*.fif
 
-    $ neuropycon input ./*/*.fif
+    $ neuropycon <...> input ./*/*.fif
 
-    '''
+    """
 
     from os.path import abspath, split
     from os.path import commonprefix as cprfx
@@ -121,17 +121,17 @@ def infosrc(fif_files):
     infosource.iterables = [('keys', iter_mapping.keys())]
     path_node.inputs.iter_mapping = iter_mapping
     return infosource, path_node
-# ------------------------------------------------------------------------ #
+#  input}}} # 
 
 
-# --------------------- Power spectral density node ---------------------- #
+#  Power spectral density node  {{{psd # 
 @cli.command('psd')
 @click.option('--fmin', default=0.,
               help='lower frequency bound; default=0')
 @click.option('--fmax', default=300.,
               help='higher frequency bound; default=300')
 def psd(fmin, fmax):
-    '''Create power computation node.
+    """Compute power spectral density.
 
     Lower and higher frequency bounds for computation
     can be changed
@@ -142,7 +142,7 @@ def psd(fmin, fmax):
 
     $ neuropycon pwr input ~/fif_epochs/*/*-epo.fif
 
-    '''
+    """
     from ephypype.interfaces.mne.power import Power
     # click.echo(list(fif_files))
     power = pe.Node(interface=Power(), name='pwr')
@@ -150,10 +150,10 @@ def psd(fmin, fmax):
     power.inputs.fmax = fmax
     power.inputs.method = 'welch'
     return power
-# ------------------------------------------------------------------------- #
+#  psd}}} # 
 
 
-# --------------------------- Connectivity -------------------------------- #
+#  Connectivity {{{conn # 
 @cli.command('conn')
 @click.option('--band', '-b', nargs=2, type=click.Tuple([float, float]),
               multiple=True, help='frequency band')
@@ -165,7 +165,7 @@ def psd(fmin, fmax):
 @click.option('--sfreq', '-s', nargs=1, type=click.INT,
               help='data sampling frequency')
 def connectivity(band, method, sfreq):
-    """Create spectral connectivity node"""
+    """Compute spectral connectivity"""
     from ephypype.interfaces.mne.spectral import SpectralConn
     # if not method:
     #     method = ('imcoh',)
@@ -176,26 +176,26 @@ def connectivity(band, method, sfreq):
     sp_conn.inputs.sfreq = sfreq
     sp_conn.iterables = [('freq_band', freq_bands), ('con_method', method)]
     return sp_conn
-# ------------------------------------------------------------------------- #
+#  conn}}} # 
 
 
-# --------------------- Epochs to timeseries node ------------------------- #
-@cli.command('ep2ts')
+#  Epochs to numpy node {{{ep2npy # 
+@cli.command('ep2npy')
 def fif_ep_2_ts():
-    ''' Create a node for epochs 2 npy timeseries conversion '''
+    """Convert .fif epochs to npy timeseries"""
 
     from ephypype.nodes.import_data import Ep2ts
     ep2ts = pe.Node(interface=Ep2ts(), name='ep2ts')
     return ep2ts
-# ------------------------------------------------------------------------- #
+#  ep2npy}}} # 
 
 
-# -------------------------- Multiscale entropy node ---------------------- #
+#  Multiscale entropy node {{{mse # 
 @cli.command('mse')
 @click.option('-m', default=2)
 @click.option('-r', default=0.2)
 def multiscale(m, r):
-    """Create multiscale entropy node
+    """Compute multiscale entropy node
 
     Experimental functionality.
     Available only in mse branch of ephypype
@@ -211,10 +211,10 @@ def multiscale(m, r):
     mse.inputs.m = m
     mse.inputs.r = r
     return mse
-# ------------------------------------------------------------------------- #
+#  mse}}} # 
 
 
-# --------------------------- ICA node ------------------------------------ #
+#  ica {{{ica # 
 @cli.command('ica')
 @click.option('--n-components', '-n', default=0.95)
 @click.option('--ecg-ch-name', '-c', type=click.STRING, default='')
@@ -227,22 +227,17 @@ def ica(n_components, ecg_ch_name, eog_ch_name):
     ica_node.inputs.ecg_ch_name = ecg_ch_name
     ica_node.inputs.eog_ch_name = eog_ch_name
     return ica_node
-# ------------------------------------------------------------------------- #
+#  ica}}} # 
 
 
-# -------------------------- Preproc node --------------------------------- #
+#  Preproc node {{{preproc # 
 @cli.command('preproc')
 @click.option('--l-freq', '-l', type=click.FLOAT)
 @click.option('--h-freq', '-h', type=click.FLOAT)
 @click.option('--ds_freq', '-d', type=click.INT,
               help='downsampling frequency')
 def preproc(l_freq, h_freq, ds_freq):
-    """Create preprocessing node.
-
-
-    Filter and downsample of raw .fif data
-
-    """
+    """Filter and downsample data."""
     from ephypype.interfaces.mne.preproc import PreprocFif
 
     preproc_node = pe.Node(interface=PreprocFif(), name='preproc')
@@ -256,27 +251,22 @@ def preproc(l_freq, h_freq, ds_freq):
         preproc_node.inputs.down_sfreq = ds_freq
 
     return preproc_node
-# -------------------------------------------------------------------------- #
+#  preproc}}} # 
 
 
-# -------------------------- DS2FIF node --------------------------------- #
+#  DS2FIF node {{{ds2fif # 
 @cli.command('ds2fif')
 def ds2fif():
-    """Create ds2fif node.
-
-
-    Convert CTF .ds raw data to .fif format
-
-    """
+    """Convert CTF .ds raw data to .fif format"""
     from ephypype.nodes.import_data import ConvertDs2Fif
 
     ds2fif_node = pe.Node(interface=ConvertDs2Fif(), name='ds2fif')
 
     return ds2fif_node
-# -------------------------------------------------------------------------- #
+#  ds2fif}}} # 
 
 
-# -------------------------- Create_epochs node --------------------------------- #
+#  Create_epochs node {{{epoch # 
 @cli.command('epoch')
 @click.option('--length', '-l', type=click.FLOAT,
               help='epoch length')
@@ -291,30 +281,25 @@ def epoch(length):
     epoch_node.inputs.ep_length = length
 
     return epoch_node
-# -------------------------------------------------------------------------- #
+#  epoch}}} # 
 
 
 def map_path(key, iter_mapping):
     """Map paths"""
     return iter_mapping[key]
 
-
+#  Greeting {{{greeting # 
 def output_greeting():
     """Output greeting"""
 
     click.echo(click.style(r'''
- _  _  ____  __  __  ____  _____  ____  _  _  ___  _____  _  _ 
-( \( )( ___)(  )(  )(  _ \(  _  )(  _ \( \/ )/ __)(  _  )( \( )
- )  (  )__)  )(__)(  )   / )(_)(  )___/ \  /( (__  )(_)(  )  ( 
-(_)\_)(____)(______)(_)\_)(_____)(__)   (__) \___)(_____)(_)\_)''', fg='magenta'))
-    click.echo(click.style(r'''
-                _.-'-'--._
-               ,', ~'` ( .'`.
-              ( ~'_ , .'(  >-)
-             ( .-' (  `__.-<  )
-              ( `-..--'_   .-')
-               `(_( (-' `-'.-)
-                   `-.__.-'=/
-                      `._`='
-                         \\''', fg='magenta'))
-
+  _   _                      _____        _____                 _.-'-'--._
+ | \ | |                    |  __ \      / ____|               ,', ~'` ( .'`.
+ |  \| | ___ _   _ _ __ ___ | |__) |   _| |     ___  _ __     ( ~'_ , .'(  >-)
+ | . ` |/ _ \ | | | '__/ _ \|  ___/ | | | |    / _ \| '_ \   ( .-' (  `__.-<  )
+ | |\  |  __/ |_| | | | (_) | |   | |_| | |___| (_) | | | |   ( `-..--'_   .-')
+ |_| \_|\___|\__,_|_|  \___/|_|    \__, |\_____\___/|_| |_|    `(_( (-' `-'.-)
+                                    __/ |                          `-.__.-'=/
+                                   |___/                              `._`='
+                                                                        \\''', fg='magenta'))
+#  greeting}}} # 
