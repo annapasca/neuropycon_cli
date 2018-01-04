@@ -1,6 +1,10 @@
 """Command line interface for ephypype package"""
+# TODO: autocompletion
 import click
 import nipype.pipeline.engine as pe
+
+import click_completion
+click_completion.init()
 
 
 @click.group(chain=True)
@@ -156,6 +160,7 @@ def psd(fmin, fmax):
 #  Connectivity {{{conn #
 @cli.command('conn')
 @click.option('--band', '-b', nargs=2, type=click.Tuple([float, float]),
+              prompt='Input frequency bin',
               multiple=True, help='frequency band')
 @click.option('--method', '-m', nargs=1,
               type=click.Choice(["coh", "imcoh", "plv", "pli",
@@ -163,6 +168,7 @@ def psd(fmin, fmax):
                                  "ppc", "cohy", "wpli2_debiased"]),
               default=('imcoh',), multiple=True, help='connectivity measure')
 @click.option('--sfreq', '-s', nargs=1, type=click.INT,
+              prompt='Input sampling frequency',
               help='data sampling frequency')
 def connectivity(band, method, sfreq):
     """Compute spectral connectivity"""
@@ -288,6 +294,7 @@ def map_path(key, iter_mapping):
     """Map paths"""
     return iter_mapping[key]
 
+
 #  Greeting {{{greeting #
 def output_greeting():
     """Output greeting"""
@@ -301,5 +308,6 @@ def output_greeting():
  |_| \_|\___|\__,_|_|  \___/|_|    \__, |\_____\___/|_| |_|    `(_( (-' `-'.-)
                                     __/ |                          `-.__.-'=/
                                    |___/                              `._`='
-                                                                        \\''', fg='magenta'))
+                                                                        \\''',
+                           fg='magenta'))
 #  greeting}}} #
