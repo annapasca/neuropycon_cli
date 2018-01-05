@@ -170,8 +170,13 @@ def psd(fmin, fmax):
 @click.option('--sfreq', '-s', nargs=1, type=click.INT,
               prompt='Input sampling frequency',
               help='data sampling frequency')
-def connectivity(band, method, sfreq):
+@click.option('--tf-mode', '-t', nargs=1,
+              type=click.Choice(['multitaper', 'cwt_morlet']),
+              default=('multitaper',),
+              help='mode of time-frequency transformation')
+def connectivity(band, method, sfreq, tf_mode):
     """Compute spectral connectivity"""
+
     from ephypype.interfaces.mne.spectral import SpectralConn
     # if not method:
     #     method = ('imcoh',)
@@ -180,6 +185,7 @@ def connectivity(band, method, sfreq):
     sp_conn = pe.Node(interface=SpectralConn(), name='sp_conn')
     # sp_conn.inputs.con_method = con_method
     sp_conn.inputs.sfreq = sfreq
+    sp_conn.inputs.mode = tf_mode
     sp_conn.iterables = [('freq_band', freq_bands), ('con_method', method)]
     return sp_conn
 #  conn}}} #
