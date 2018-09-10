@@ -65,4 +65,4 @@ If you've been using virtualenv you should activate it each time you are running
 Documentation
 --------------
 
-Detailed documentation can be found [here](http://neuropycon-cli.readthedocs.io/en/latest/)
+Detailed documentation can be found [here](https://neuropycon.github.io/neuropycon_doc/neuropycon_cli/neuropycon_cli.html)
