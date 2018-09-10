@@ -8,11 +8,13 @@ Getting started
 ------------
 
 ### Prerequisites
-For now CLI works only with python2; python3 support might also happen in the future.
+CLI works both with python2 and python3 and depends on the following packages:
 
-Full list of dependencies can be found [here](https://github.com/dmalt/neuropycon_cli/commit/1621265f8b43d901a25c12ac863b31c98f2d8b58).
+- Click
+- nipype
+- ephypype
 
-No need to install them manually though. All dependencies are installed
+No need to install them manually. All dependencies are installed
 automatically during the *Installation* step
 
 ### Installation
@@ -22,9 +24,9 @@ automatically during the *Installation* step
     git clone https://github.com/dmalt/neuropycon_cli.git
     cd neuropycon_cli
     ```
-2) The simplest way to install the package is as follows:
+2) The simplest way to install the package with all dependencies is as follows:
     ```bash
-    pip install .
+    pip install -r requirements.txt
     cd ..
     ```
 
@@ -46,11 +48,11 @@ automatically during the *Installation* step
       ```
     * Perform the installation (note the '.' symbol in the end):
       ```bash
-      pip install .
+      pip install -r requirements.txt
       cd .. # exit from the project folder
       ```
 
-If you've been using virtualenv you should activate it each time you are running neuroclick
+If you've been using virtualenv you should activate it each time you are running neuropycon_cli
 
 3) You can check the installation by running 
     ```bash
@@ -60,6 +62,5 @@ If you've been using virtualenv you should activate it each time you are running
 
 Documentation
 --------------
-[For quick ref check out my presentation on neuropycon_cli package](https://github.com/dmalt/neuropycon_cli/blob/master/main.pdf)
 
 Detailed documentation can be found [here](http://neuropycon-cli.readthedocs.io/en/latest/)
