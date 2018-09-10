@@ -27,6 +27,7 @@ automatically during the *Installation* step
 2) The simplest way to install the package with all dependencies is as follows:
     ```bash
     pip install -r requirements.txt
+    pip install .
     cd ..
     ```
 
@@ -49,6 +50,7 @@ automatically during the *Installation* step
     * Perform the installation (note the '.' symbol in the end):
       ```bash
       pip install -r requirements.txt
+      pip install .
       cd .. # exit from the project folder
       ```
 
