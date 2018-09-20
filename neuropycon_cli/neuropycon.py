@@ -1,10 +1,11 @@
 """Command line interface for ephypype package"""
 # TODO: autocompletion
+#       consider merging conn and ep2ts nodes
+#       create additional node for plugin option so
+#       the -n option can be invoked only in multiproc
+
 import click
 import nipype.pipeline.engine as pe
-
-import click_completion
-click_completion.init()
 
 
 @click.group(chain=True)
