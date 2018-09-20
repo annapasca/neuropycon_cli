@@ -31,31 +31,6 @@ automatically during the *Installation* step
     cd ..
     ```
 
-    But it is strongly recommended to install *neuroclick* under virtual environement so the dependencies
-    don't damage your current python setup.
-
-    To do so perform the following steps:
-
-    * [Install virtualenv package](https://virtualenv.pypa.io/en/stable/installation/)
-      if it's not already in your system
-    * Think of a name for your virtual environement (i.e. neuroenv) and
-      create virtual environement inside the project folder by running 
-        ```bash
-        virtualenv neuroenv
-        ```
-    * Activate your virtual environement:
-      ```bash
-      source ./neuroenv/bin/activate
-      ```
-    * Perform the installation (note the '.' symbol in the end):
-      ```bash
-      pip install -r requirements.txt
-      pip install .
-      cd .. # exit from the project folder
-      ```
-
-If you've been using virtualenv you should activate it each time you are running neuropycon_cli
-
 3) You can check the installation by running 
     ```bash
     neuropycon --help
@@ -65,4 +40,5 @@ If you've been using virtualenv you should activate it each time you are running
 Documentation
 --------------
 
-Detailed documentation can be found [here](https://neuropycon.github.io/neuropycon_doc/neuropycon_cli/neuropycon_cli.html)
+Detailed documentation can be found
+[here](https://neuropycon.github.io/neuropycon_doc/neuropycon_cli/neuropycon_cli.html)
