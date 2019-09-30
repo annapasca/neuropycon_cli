@@ -18,6 +18,8 @@
 #
 import os
 import sys
+from datetime import date
+import sphinx_bootstrap_theme
 sys.path.insert(0, os.path.abspath('../neuropycon_cli'))
 
 
@@ -40,13 +42,15 @@ sys.path.insert(0, os.path.abspath('../neuropycon_cli'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
+extensions = [
+    'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
-    'sphinx_click.ext']
+    'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
+    'numpydoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.doctest',
+]
 
 # autodoc_mock_imports = ['numpy', 'nipype.pipeline.engine', 'click', 'neuropype_ephy']
 autodoc_mock_imports = ['numpy', 'nipype.pipeline.engine',  'neuropype_ephy']
@@ -65,8 +69,12 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'neuropycon_cli'
-copyright = u'2017, Dmitrii Altukhov'
+td = date.today()
+copyright = u'%s, Neuropycon Developers. Last updated on %s' % (td.year,
+                                                                td.isoformat())
+
 author = u'Dmitrii Altukhov'
+
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -102,13 +110,22 @@ todo_include_todos = True
 # a list of builtin themes.
 #
 # html_theme = 'alabaster'
-html_theme = 'default'
+html_theme = 'bootstrap'
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'navbar_title': 'Neuropycon_cli',
+    'bootswatch_theme': "flatly",
+    'navbar_sidebarrel': False,
+    'bootstrap_version': "3",
+    'navbar_links': [
+        ("Github", "https://github.com/neuropycon/neuropycon_cli", True),
+    ],
+    'bootswatch_theme': "united"}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

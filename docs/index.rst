@@ -1,17 +1,64 @@
-.. neuroclick documentation master file, created by
-   sphinx-quickstart on Fri Jan 27 18:55:36 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _neuropycon_cli:
 
-Welcome to neuropycon_cli documentation!
-======================================
+
+neuropycon_cli
+**************
+
+`neuropycon_cli <https://github.com/neuropycon/neuropycon_cli>`__
+package provides a command line interface to :ref:`ephypype` designed
+to make the best use of UNIX shell capabilities and nipype framework
+for parallel processing of MEEG datasets.
+
+In brief, it utilized pattern matching capabilities of UNIX shell
+to select files we want to process from nested folders strurcture of a dataset
+and then creates on the go a processing **pipeline** combining
+computational **nodes** defined in :ref:`ephypype` package.
+
+In practice it looks like this:
+
+.. figure::  ./img/cli_scheme.png
+   :align:   center
+
+Example above shows how connectivity metrics can be computed on a group of files.
+This command grabs all the :code:`.fif` files in the two-level nested folder structure,
+creates one-second epochs from them, converts epochs to numpy arrays format,
+performs connectvity metrics calculation on the converted data and saves the results.
+
+.. For more examples please consult :ref:`examples`
+
+.. Quickstart
+.. ----------
+.. First follow the installation instructions in `README <https://github.com/neuropycon/neuropycon_cli>`__
+
+
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :caption: Documentation Contents:
 
-   intro
-   code
+   tutorial
+   commands
+
+.. Submodules
+.. ----------
+
+.. neuropycon\_cli\.neuropycon module
+.. ----------------------------------
+
+.. .. automodule:: neuropycon_cli.neuropycon
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
+
+
+.. Module contents
+.. ---------------
+
+.. automodule:: neuropycon_cli
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 
 
