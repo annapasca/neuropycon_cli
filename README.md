@@ -41,4 +41,4 @@ Documentation
 --------------
 
 Detailed documentation can be found
-[here](https://neuropycon.github.io/neuropycon_doc/neuropycon_cli/neuropycon_cli.html)
+[here](https://neuropycon.github.io/neuropycon_cli/)
